@@ -818,49 +818,38 @@ public class calculadora extends JFrame {
 					labelSecundario.setText(montante + " + " + montante2 + " =");
 					montante = somarNumeros(montante, montante2);
 					labelPrimario.setText(montante);
-					etapa = 1;
-					operacao = 0;
+					res();
 					op = 4;
-					pontinho = 0;
-					tracinho = 0;
-					pos = 1;
+					
 				} 
 				else if (operacao == 3 && etapa == 2 && tamMon2 != 0) {
 					labelSecundario.setText(montante + " - " + montante2 + " =");
 					montante = subtrairNumeros(montante, montante2);
 					labelPrimario.setText(montante);
-					etapa = 1;
-					operacao = 0;
+					res();
 					op = 3;
-					pontinho = 0;
-					tracinho = 0;
-					pos = 1;
+					
 				} 
 				else if (operacao == 2 && etapa == 2 && tamMon2 != 0) {
 					labelSecundario.setText(montante + " x " + montante2 + " =");
 					montante = multiplicarNumeros(montante, montante2);
 					labelPrimario.setText(montante);
-					etapa = 1;
-					operacao = 0;
+					res();
 					op = 2;
-					pontinho = 0;
-					tracinho = 0;
-					pos = 1;
+					
 				} 
 				else if (operacao == 1 && etapa == 2 && tamMon2 != 0) {
 					if (Double.valueOf(montante2) == 0) {
 						resetarCalculadora();
 						labelSecundario.setText("Não pode dividir por zero");
-					} else {
+					} 
+					else {
 						labelSecundario.setText(montante + " ÷ " + montante2 + " =");
 						montante = dividirNumeros(montante, montante2);
 						labelPrimario.setText(montante);
-						etapa = 1;
-						operacao = 0;
+						res();
 						op = 1;
-						pontinho = 0;
-						tracinho = 0;
-						pos = 1;
+						
 					}
 				}
 			} 
@@ -917,4 +906,14 @@ public class calculadora extends JFrame {
 		cont = 1;
 		pos = 0;
     }
+    
+    public void res() {
+		etapa = 1;
+		operacao = 0;
+		pontinho = 0;
+		tracinho = 0;
+		pos = 1;
 }
+}
+
+/*texto*/
