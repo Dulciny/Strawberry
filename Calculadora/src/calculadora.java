@@ -915,5 +915,3 @@ public class calculadora extends JFrame {
 		pos = 1;
 }
 }
-
-/*texto*/
