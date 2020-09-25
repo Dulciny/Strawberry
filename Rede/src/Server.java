@@ -48,12 +48,12 @@ public class Server extends Thread {
                 espalharMsg(BEscritor,mensagem);
                 System.out.println(mensagem);
                 if(mensagem.equals("/platypus")) {
-                	espalharMsg(null,"Desligando o servidor...");
+                	espalharMsg(BEscritor,mensagem);
 //                	socket.close();
 //            		linhaEntrada.close();
 //            		leitorLinhaEntrada.close();
 //            		BLeitor.close();
-            		System.exit(0);
+            		
                 }
             }
         }catch (Exception e) {
@@ -63,12 +63,15 @@ public class Server extends Thread {
     
     public void espalharMsg(BufferedWriter BSaida, String mensagem) throws IOException {
     	BufferedWriter BEscritor;
-    	if(BSaida==null) {
+    	if(mensagem.equals("/platypus")) {
     		for(BufferedWriter Bescritor:clientes){
+    			mensagem="Desligando o servidor...";
+    			nome="Server: ";
                 BEscritor = (BufferedWriter)Bescritor;
-                Bescritor.write("Server: Desligando o servidor...");
+                Bescritor.write(nome+mensagem+"\r\n");
                 Bescritor.flush();
-    		}
+                //System.exit(0);
+                }
     	}else {       
        try {
     	   for(BufferedWriter Bescritor:clientes){
@@ -110,9 +113,10 @@ public class Server extends Thread {
             while(true){
                 System.out.println("Aguardando conexão...");
                 Socket socket = server.accept();
-                String hostName = socket.getInetAddress().getHostName();
-                String aviso = "Cliente " +hostName+" conectado...";
+               // String hostName = socket.getInetAddress().getHostName();
+                String aviso = "Cliente " +socket+" conectado...";
                 System.out.println(aviso);
+                
                 Thread t = new Server(socket);
                 t.start();
                 //espalharMsg(BEscritor,aviso);

@@ -1,8 +1,6 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.synth.SynthScrollBarUI;
-
 import java.awt.SystemColor;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -134,12 +132,12 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
 		
 		lblNome = new JLabel(nome.substring(0,nome.length()-2));
 		lblNome.setFont(new Font("SansSerif",Font.PLAIN,14));
-		lblNome.setBounds(159,43,280,19);
+		lblNome.setBounds(177,43,280,19);
 		contentPane.add(lblNome);
 		
 		lblConexao = new JLabel("");
 		lblConexao.setFont(new Font("SansSerif",Font.PLAIN,18));
-		lblConexao.setBounds(10, 43, 145, 19);
+		lblConexao.setBounds(10, 43, 180, 19);
 		contentPane.add(lblConexao);
 		
         lblponto = new JLabel(".");
@@ -222,7 +220,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
         BEscritor = new BufferedWriter(redator);
         BEscritor.write(txtNome.getText()+"\r\n");
         BEscritor.flush();	        
-        lblConexao.setText("Conectado como: ");
+        lblConexao.setText("Conectado(a) como: ");
         lblConexao.setForeground(Color.GREEN);
         timer();        
 	    }catch(Exception er) {
@@ -238,11 +236,12 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
     	String txt = campoEnviar.getText();
          	try {
              if(txt.equals("/platypus")) {
-             BEscritor.write(txt+"\r\n");
-             caixaMensagem.append("Desligando o servidor...");
+             BEscritor.write("/platypus");
+             nome="Server: ";
+             caixaMensagem.append(nome+"Desligando o servidor...\r\n");
              campoEnviar.setText("");
              txt="";
-             sair2();
+             sair3();
              }else {
              BEscritor.write(txt+"\r\n");
              caixaMensagem.append(nome+txt+"\r\n");
@@ -262,9 +261,13 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
         
         while(true)      	
             if(bfr.ready()){
-            	msg = bfr.readLine();                           
+            	msg = bfr.readLine();
+            	if(msg.equals("Server: Desligando o servidor...")) {
+            		sair3();
+            	}else {
                 	caixaMensagem.append(msg+"\r\n");
-                    caixaMensagem.setCaretPosition(caixaMensagem.getDocument().getLength());          	 
+                    caixaMensagem.setCaretPosition(caixaMensagem.getDocument().getLength());
+            	}
       }
     }
 	
@@ -308,6 +311,39 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
             caixaMensagem.append("Saiu da sala!"+"\r\n");
             campoEnviar.setText("");
 		    caixaMensagem.append("Chat: "+"Desconectando...");
+		    BEscritor.close();
+			redator.close();
+		    linhaSaida.close();
+		    socket.close();
+			lblConexao.setText("Desconectado");
+			lblConexao.setForeground(Color.RED);
+			lblponto.setForeground(Color.GRAY);
+			cor = 3;
+			long TEMPO = (700 * 7); 
+			timer =null;
+			 if (timer==null) {
+	              timer=new Timer();
+	              TimerTask tarefa=new TimerTask() {
+	              public void run() {
+	               try {                        	   
+	            	   System.exit(0);
+	                  } catch (Exception e) {
+	                     //e.printStackTrace();
+	                   }
+	                  }
+	                 };
+	               timer.scheduleAtFixedRate(tarefa, TEMPO, TEMPO);
+	           }				
+	    } catch (IOException e) {
+			System.exit(0);
+	   }	     
+	}
+	
+	public void sair3() {
+        try {		
+            caixaMensagem.append("Você saiu da sala!"+"\r\n");
+            campoEnviar.setText("");
+		    caixaMensagem.append("Chat: "+"Desconectando..."+"\r\n");
 		    BEscritor.close();
 			redator.close();
 		    linhaSaida.close();
