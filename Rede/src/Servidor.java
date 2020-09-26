@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -12,12 +13,9 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -25,7 +23,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 
 public class Servidor extends Thread {
 
@@ -182,6 +179,7 @@ public class Servidor extends Thread {
 			}
 			f = new JFrame("Don't peek! - " + "Porta: " + txtPorta.getText() + " - Ip: " + ip);
 			f.setSize(451, 491);
+			f.setIconImage(Toolkit.getDefaultToolkit().getImage("E:\\doc\\Sharex\\2020-09\\javaw_LYkh0xfG2J.png"));
 			f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			p = new JPanel();
 			p.setBackground(Color.gray);

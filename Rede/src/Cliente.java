@@ -1,19 +1,12 @@
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.SystemColor;
-import javax.swing.JTextField;
-import javax.swing.JButton;
+import java.awt.Toolkit;
 import java.awt.Color;
-import javax.swing.JTextArea;
 import java.awt.Font;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ActionEvent;
-import javax.swing.UIManager;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
@@ -41,14 +34,14 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 	private JPanel contentPane;
 	private JTextField campoEnviar, txtIP, txtPorta, txtNome;
 	private Socket socket;
-	private String nome;
-	private JLabel lblConexao, lblponto;
+	private String nome, titulo;
+	private JLabel lblConexao, lblponto, lblNome;
 	private JTextArea caixaMensagem;
 	private OutputStream linhaSaida;
 	private Writer redator;
 	private BufferedWriter BEscritor;
 	private Timer timer = null;
-	private int cor = 1, notificacao;
+	private int cor = 1, notificacao, sair = 0;
 	public java.net.URL noti;
 
 	public static void main(String[] args) {
@@ -78,10 +71,10 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 		txtNome = new JTextField();
 		Object[] dados = { lblMessage, lblIp, txtIP, lblPorta, txtPorta, lblNome, txtNome };
 		JOptionPane.showMessageDialog(null, dados);
-		if (txtNome.getText().equals("") || txtNome.getText().equals(null)) {
+		if (txtNome.getText().equals("") || txtNome.getText().equals(null) || txtNome.getText().length() == 1) {
 			nome = "Anônimo: ";
 		} else
-			nome = txtNome.getText();
+			nome = txtNome.getText() + "  ";
 		if (txtIP.getText().equals(null))
 			txtIP.setText("localhost");
 		if (txtPorta.getText().equals(""))
@@ -89,6 +82,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 		if (txtPorta.getText().length() > 0) {
 
 			setTitle("ChatBox");
+			setIconImage(Toolkit.getDefaultToolkit().getImage("E:\\doc\\Sharex\\2020-09\\javaw_LYkh0xfG2J.png"));
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			setBounds(100, 100, 534, 395);
 			contentPane = new JPanel();
@@ -106,7 +100,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 			caixaMensagem = new JTextArea();
 			panel.add(caixaMensagem);
 			caixaMensagem.setEditable(false);
-			caixaMensagem.setFont(new Font("SansSerif", Font.PLAIN, 15));
+			caixaMensagem.setFont(new Font(" Akzidenz Grotesk", Font.PLAIN, 15));
 			JScrollPane scroll = new JScrollPane(caixaMensagem);
 			scroll.setBorder(BorderFactory.createEtchedBorder(Color.white, Color.white));
 			scroll.setBounds(0, 0, 498, 223);
@@ -115,7 +109,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 			panel.addFocusListener(this);
 
 			campoEnviar = new JTextField();
-			campoEnviar.setFont(new Font("SansSerif", Font.PLAIN, 15));
+			campoEnviar.setFont(new Font(" Akzidenz Grotesk", Font.PLAIN, 15));
 			campoEnviar.setBackground(SystemColor.inactiveCaptionBorder);
 			campoEnviar.setBounds(10, 301, 385, 47);
 			contentPane.add(campoEnviar);
@@ -130,27 +124,28 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 			panel_1.addFocusListener(this);
 
 			JLabel lblChat = new JLabel("Chat");
-			lblChat.setFont(new Font("SansSerif", Font.BOLD, 30));
-			lblChat.setBounds(10, 0, 67, 45);
+			lblChat.setFont(new Font(" Akzidenz Grotesk", Font.BOLD, 30));
+			lblChat.setBounds(10, 0, 69, 45);
 			contentPane.add(lblChat);
 			lblChat.addFocusListener(this);
 
 			JLabel lblBox = new JLabel("Box");
 			lblBox.setForeground(new Color(128, 0, 0));
 			lblBox.setBackground(new Color(128, 0, 0));
-			lblBox.setFont(new Font("SansSerif", Font.BOLD, 30));
+			lblBox.setFont(new Font(" Akzidenz Grotesk", Font.BOLD, 30));
 			lblBox.setBounds(78, 0, 240, 45);
 			contentPane.add(lblBox);
 			lblBox.addFocusListener(this);
 
-			lblNome = new JLabel(nome.substring(0, nome.length() - 2));
-			lblNome.setFont(new Font("SansSerif", Font.PLAIN, 14));
+			titulo = nome.substring(0, nome.length() - 2);
+			lblNome = new JLabel(titulo);
+			lblNome.setFont(new Font(" Akzidenz Grotesk", Font.PLAIN, 14));
 			lblNome.setBounds(177, 43, 280, 19);
 			contentPane.add(lblNome);
 			lblNome.addFocusListener(this);
 
 			lblConexao = new JLabel("");
-			lblConexao.setFont(new Font("SansSerif", Font.PLAIN, 18));
+			lblConexao.setFont(new Font(" Akzidenz Grotesk", Font.PLAIN, 18));
 			lblConexao.setBounds(10, 43, 180, 19);
 			contentPane.add(lblConexao);
 			lblConexao.addFocusListener(this);
@@ -159,7 +154,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 			lblponto.setHorizontalAlignment(SwingConstants.RIGHT);
 			lblponto.setForeground(SystemColor.textInactiveText);
 			lblponto.setVerticalAlignment(SwingConstants.BOTTOM);
-			lblponto.setFont(new Font("Tahoma", Font.BOLD, 50));
+			lblponto.setFont(new Font(" Akzidenz Grotesk", Font.BOLD, 50));
 			lblponto.setBounds(484, 18, 24, 21);
 			contentPane.add(lblponto);
 			lblponto.addFocusListener(this);
@@ -167,7 +162,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 			JButton btnEnviar = new JButton("Enviar");
 			btnEnviar.setForeground(UIManager.getColor("ColorChooser.foreground"));
 			btnEnviar.setBackground(SystemColor.textHighlight);
-			btnEnviar.setFont(new Font("SansSerif", Font.BOLD, 15));
+			btnEnviar.setFont(new Font(" Akzidenz Grotesk", Font.BOLD, 15));
 			btnEnviar.setBounds(394, 301, 114, 47);
 			contentPane.add(btnEnviar);
 			btnEnviar.addKeyListener(this);
@@ -177,14 +172,15 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 					try {
 						enviarMensagem();
 					} catch (IOException e1) {
-						sair3();
+						sair = 3;
+						sair();
 					}
 				}
 			});
 
 			JButton btnSair = new JButton("Sair");
 			btnSair.setForeground(UIManager.getColor("ColorChooser.foreground"));
-			btnSair.setFont(new Font("SansSerif", Font.BOLD, 12));
+			btnSair.setFont(new Font(" Akzidenz Grotesk", Font.BOLD, 12));
 			btnSair.setBackground(Color.PINK);
 			btnSair.setBounds(449, 43, 59, 23);
 			contentPane.add(btnSair);
@@ -192,13 +188,13 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 			btnSair.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
+						sair = 1;
 						sair();
 					} catch (Exception er) {
 						System.exit(1);
 					}
 				}
 			});
-
 		}
 	}
 
@@ -244,12 +240,14 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 			campoEnviar.setText("/conectar");
 			enviarMensagem();
 		} catch (Exception er) {
-			System.out.println(er + "i");
+			// System.out.println(er + "i");
 			;
 			caixaMensagem.setText("Erro: não foi possivel conectar-se ao servidor, tente novamente.");
 			lblConexao.setForeground(Color.RED);
 			lblConexao.setText("Desconectado");
-			sair2();
+			lblNome.setText("");
+			sair = 2;
+			sair();
 		}
 	}
 
@@ -258,31 +256,39 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 		java.util.Date data = new java.util.Date();
 		SimpleDateFormat formatarData = new SimpleDateFormat("HH:mm");
 		String hora = formatarData.format(data);
-		try {
-			if (txt.equals("/platypus")) {
-				BEscritor.write("/platypus");
-				nome = "Server: ";
-				caixaMensagem.append(nome + "Desligando o servidor...\r\n");
-				campoEnviar.setText("");
-				txt = "";
-				sair3();
-			} else if (txt.equals("/conectar")) {
-				BEscritor.write(txt + "\r\n");
-				caixaMensagem.append("Chat: Bem-vindo(a), " + nome.substring(0, nome.length() - 2) + "\r\n");
-				campoEnviar.setText("");
-				txt = "";
-			} else if (txt.length() > 0) {
-				BEscritor.write(txt + "\r\n");
-				caixaMensagem.append(hora + " - ");
-				caixaMensagem.append("Você: " + txt + "\r\n");
-				campoEnviar.setText("");
-				txt = "";
+		if (txt.length() > 0) {
+			try {
+				if (txt.equals("/platypus")) {
+					BEscritor.write("/platypus");
+					nome = "Server: ";
+					caixaMensagem.append(nome + "Desligando o servidor...\r\n");
+					campoEnviar.setText("");
+					txt = "";
+					sair = 3;
+					sair();
+				} else if (txt.equals("/conectar")) {
+					BEscritor.write(txt + "\r\n");
+					caixaMensagem.append("Chat: Bem-vindo(a), " + nome.substring(0, nome.length() - 2) + "\r\n");
+					campoEnviar.setText("");
+					txt = "";
+				} else {
+					BEscritor.write(txt + "\r\n");
+					caixaMensagem.append(hora + " - ");
+					caixaMensagem.append("Você: " + txt + "\r\n");
+					campoEnviar.setText("");
+					txt = "";
+				}
+			} catch (Exception e) {
+				// System.out.println(e+"h");
 			}
-		} catch (Exception e) {
-			// System.out.println(e+"h");
+			try {
+				BEscritor.flush();
+				campoEnviar.setText("");
+			} catch (Exception e) {
+				sair = 4;
+				sair();
+			}
 		}
-		BEscritor.flush();
-		campoEnviar.setText("");
 	}
 
 	public void escutar() throws IOException {
@@ -295,7 +301,8 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 			if (BLeitor.ready()) {
 				msg = BLeitor.readLine();
 				if (msg.equals("Chat: Finalizando sessão...")) {
-					sair3();
+					sair = 3;
+					sair();
 				} else {
 					notificacao();
 					caixaMensagem.append(msg + "\r\n");
@@ -305,102 +312,103 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 	}
 
 	public void sair() {
-		try {
-			BEscritor.write("Saiu da sala!" + "\r\n");
-			caixaMensagem.append("Saiu da sala!" + "\r\n");
-			campoEnviar.setText("");
-			caixaMensagem.append("Chat: " + "Desconectando...");
-			BEscritor.close();
-			redator.close();
-			linhaSaida.close();
-			socket.close();
-			lblConexao.setText("Desconectado");
-			lblConexao.setForeground(Color.RED);
-			lblponto.setForeground(Color.GRAY);
-			cor = 3;
-			long TEMPO = (700 * 3);
-			timer = null;
-			if (timer == null) {
-				timer = new Timer();
-				TimerTask tarefa = new TimerTask() {
-					public void run() {
-						try {
-							System.exit(0);
-						} catch (Exception e) {
-							// System.out.println(e);
+		if (sair == 1) {
+			try {
+				BEscritor.write("Saiu da sala!" + "\r\n");
+				caixaMensagem.append("Saiu da sala!" + "\r\n");
+				campoEnviar.setText("");
+				caixaMensagem.append("Chat: " + "Desconectando...");
+				BEscritor.close();
+				redator.close();
+				linhaSaida.close();
+				socket.close();
+				lblConexao.setText("Desconectado");
+				lblConexao.setForeground(Color.RED);
+				lblponto.setForeground(Color.GRAY);
+				cor = 3;
+				long TEMPO = (700 * 3);
+				timer = null;
+				if (timer == null) {
+					timer = new Timer();
+					TimerTask tarefa = new TimerTask() {
+						public void run() {
+							try {
+								System.exit(0);
+							} catch (Exception e) {
+								// System.out.println(e);
+								System.exit(0);
+							}
 						}
-					}
-				};
-				timer.scheduleAtFixedRate(tarefa, TEMPO, TEMPO);
+					};
+					timer.scheduleAtFixedRate(tarefa, TEMPO, TEMPO);
+				}
+			} catch (IOException e) {
+				System.exit(0);
 			}
-		} catch (IOException e) {
-			System.exit(0);
-		}
-	}
-
-	public void sair2() {
-		try {
-			BEscritor.write(nome + "Saiu da sala!" + "\r\n");
-			caixaMensagem.append("Saiu da sala!" + "\r\n");
-			campoEnviar.setText("");
-			caixaMensagem.append("Chat: " + "Desconectando...");
-			BEscritor.close();
-			redator.close();
-			linhaSaida.close();
-			socket.close();
-			lblConexao.setText("Desconectado");
-			lblConexao.setForeground(Color.RED);
-			lblponto.setForeground(Color.GRAY);
-			cor = 3;
-			long TEMPO = (700 * 7);
-			timer = null;
-			if (timer == null) {
-				timer = new Timer();
-				TimerTask tarefa = new TimerTask() {
-					public void run() {
-						try {
-							System.exit(0);
-						} catch (Exception e) {
-							// System.out.println(e+"e");
+		} else if (sair == 2) {
+			try {
+				BEscritor.write(nome + "Saiu da sala!" + "\r\n");
+				caixaMensagem.append("Saiu da sala!" + "\r\n");
+				campoEnviar.setText("");
+				caixaMensagem.append("Chat: " + "Desconectando...");
+				BEscritor.close();
+				redator.close();
+				linhaSaida.close();
+				socket.close();
+				lblConexao.setText("Desconectado");
+				lblConexao.setForeground(Color.RED);
+				lblponto.setForeground(Color.GRAY);
+				cor = 3;
+				long TEMPO = (700 * 7);
+				timer = null;
+				if (timer == null) {
+					timer = new Timer();
+					TimerTask tarefa = new TimerTask() {
+						public void run() {
+							try {
+								System.exit(0);
+							} catch (Exception e) {
+								// System.out.println(e+"e");
+							}
 						}
-					}
-				};
-				timer.scheduleAtFixedRate(tarefa, TEMPO, TEMPO);
+					};
+					timer.scheduleAtFixedRate(tarefa, TEMPO, TEMPO);
+				}
+			} catch (IOException e) {
+				System.exit(0);
 			}
-		} catch (IOException e) {
-			System.exit(0);
-		}
-	}
-
-	public void sair3() {
-		try {
-			caixaMensagem.append("Chat: Finalizando sessão...\r\n");
-			campoEnviar.setText("");
-			caixaMensagem.append("Chat: " + "Desconectado" + "\r\n");
-			BEscritor.close();
-			redator.close();
-			linhaSaida.close();
-			socket.close();
-			lblConexao.setText("Desconectado");
-			lblConexao.setForeground(Color.RED);
-			lblponto.setForeground(Color.GRAY);
-			cor = 3;
-			long TEMPO = (700 * 7);
-			timer = null;
-			if (timer == null) {
-				timer = new Timer();
-				TimerTask tarefa = new TimerTask() {
-					public void run() {
-						try {
-							System.exit(0);
-						} catch (Exception e) {
-							// System.out.println(e+"d");
+		} else if (sair == 3) {
+			try {
+				caixaMensagem.append("Chat: Finalizando sessão...\r\n");
+				campoEnviar.setText("");
+				caixaMensagem.append("Chat: " + "Desconectado" + "\r\n");
+				BEscritor.close();
+				redator.close();
+				linhaSaida.close();
+				socket.close();
+				lblConexao.setText("Desconectado");
+				lblConexao.setForeground(Color.RED);
+				lblponto.setForeground(Color.GRAY);
+				cor = 3;
+				long TEMPO = (700 * 7);
+				timer = null;
+				if (timer == null) {
+					timer = new Timer();
+					TimerTask tarefa = new TimerTask() {
+						public void run() {
+							try {
+								System.exit(0);
+							} catch (Exception e) {
+								// System.out.println(e+"d");
+							}
 						}
-					}
-				};
-				timer.scheduleAtFixedRate(tarefa, TEMPO, TEMPO);
+					};
+					timer.scheduleAtFixedRate(tarefa, TEMPO, TEMPO);
+				}
+			} catch (IOException e) {
+				System.exit(0);
 			}
-		} catch (IOException e) {
+		} else if (sair == 4) {
 			System.exit(0);
 		}
 	}
@@ -446,9 +454,15 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 				Clip clip = AudioSystem.getClip();
 				clip.open(audioIn);
 				clip.start();
+				toFront();
+				// TrayIcon.displayMessage("ChatBox", "Você recebeu uma mensagem... ", null);
 			} catch (Exception e) {
-				// System.out.println(e+"g");
+				// JOptionPane.showMessageDialog(null, "e");
 			}
 		}
+	}
+
+	public void aviso(String message) {
+
 	}
 }
