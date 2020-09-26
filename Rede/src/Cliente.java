@@ -20,7 +20,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -29,8 +28,6 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
-
-import javax.print.DocFlavor.URL;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -53,7 +50,6 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 	private Timer timer = null;
 	private int cor = 1, notificacao;
 	public java.net.URL noti;
-	
 
 	public static void main(String[] args) {
 		try {
@@ -68,7 +64,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 			frame.conectar();
 			frame.escutar();
 		} catch (Exception e) {
-			// e.printStackTrace();
+			// System.out.println(e+"b");
 		}
 	}
 
@@ -181,7 +177,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 					try {
 						enviarMensagem();
 					} catch (IOException e1) {
-						// e1.printStackTrace();
+						sair3();
 					}
 				}
 			});
@@ -217,7 +213,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 			try {
 				enviarMensagem();
 			} catch (IOException e1) {
-				// e1.printStackTrace();
+				// System.out.println(e1+"f");;
 			}
 		}
 	}
@@ -248,7 +244,8 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 			campoEnviar.setText("/conectar");
 			enviarMensagem();
 		} catch (Exception er) {
-			// er.printStackTrace();
+			System.out.println(er + "i");
+			;
 			caixaMensagem.setText("Erro: não foi possivel conectar-se ao servidor, tente novamente.");
 			lblConexao.setForeground(Color.RED);
 			lblConexao.setText("Desconectado");
@@ -271,7 +268,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 				sair3();
 			} else if (txt.equals("/conectar")) {
 				BEscritor.write(txt + "\r\n");
-				caixaMensagem.append("Chat: Bem-vindo(a) " + nome.substring(0, nome.length() - 2) + "\r\n");
+				caixaMensagem.append("Chat: Bem-vindo(a), " + nome.substring(0, nome.length() - 2) + "\r\n");
 				campoEnviar.setText("");
 				txt = "";
 			} else if (txt.length() > 0) {
@@ -282,6 +279,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 				txt = "";
 			}
 		} catch (Exception e) {
+			// System.out.println(e+"h");
 		}
 		BEscritor.flush();
 		campoEnviar.setText("");
@@ -329,7 +327,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 						try {
 							System.exit(0);
 						} catch (Exception e) {
-							// e.printStackTrace();
+							// System.out.println(e);
 						}
 					}
 				};
@@ -363,7 +361,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 						try {
 							System.exit(0);
 						} catch (Exception e) {
-							// e.printStackTrace();
+							// System.out.println(e+"e");
 						}
 					}
 				};
@@ -375,7 +373,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 	}
 
 	public void sair3() {
-		try {			
+		try {
 			caixaMensagem.append("Chat: Finalizando sessão...\r\n");
 			campoEnviar.setText("");
 			caixaMensagem.append("Chat: " + "Desconectado" + "\r\n");
@@ -396,7 +394,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 						try {
 							System.exit(0);
 						} catch (Exception e) {
-							// e.printStackTrace();
+							// System.out.println(e+"d");
 						}
 					}
 				};
@@ -422,7 +420,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 							cor = 1;
 						}
 					} catch (Exception e) {
-						// e.printStackTrace();
+						// System.out.println(e+"c");
 					}
 				}
 			};
@@ -439,7 +437,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 	}
 
 	void notificacao() {
-			
+
 		if (notificacao == 1) {
 			try {
 				noti = getClass().getResource("notificacao.wav");
@@ -449,7 +447,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 				clip.open(audioIn);
 				clip.start();
 			} catch (Exception e) {
-				// System.out.println(e);
+				// System.out.println(e+"g");
 			}
 		}
 	}
