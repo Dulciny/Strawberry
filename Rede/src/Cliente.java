@@ -45,6 +45,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 	public java.net.URL noti;
 
 	public static void main(String[] args) {
+		/* inicia todas as funções necessarias para conectar ao servidor e mostrar a interface */
 		try {
 			Cliente frame = new Cliente();
 			frame.setVisible(true);
@@ -62,7 +63,9 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 	}
 
 	public Cliente() throws IOException {
-		JLabel lblMessage = new JLabel(" --------------- Conectar ---------------");
+		/* pergunta os dados do servidor e nome de usuario do cliente */ 
+		/* tbm inicia a interface */
+		JLabel lblMessage = new JLabel(" ----------------- Conectar -----------------");
 		JLabel lblIp = new JLabel("Ip:");
 		txtIP = new JTextField();
 		JLabel lblPorta = new JLabel("Porta:");
@@ -204,7 +207,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 	}
 
 	public void keyPressed(KeyEvent e) {
-
+  /* listener pra ver se enter foi pressionado */
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			try {
 				enviarMensagem();
@@ -225,6 +228,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 	}
 
 	public void conectar() throws IOException {
+		/* funcao que tenta conectar com o socket pelo ip e porta fornecidos */
 		lblConexao.setForeground(Color.BLACK);
 		lblConexao.setText("Conectando...");
 		try {
@@ -252,6 +256,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 	}
 
 	public void enviarMensagem() throws IOException {
+		/* funcao que envia a mensagem pela conexão estabelecida */
 		String txt = campoEnviar.getText();
 		java.util.Date data = new java.util.Date();
 		SimpleDateFormat formatarData = new SimpleDateFormat("HH:mm");
@@ -292,6 +297,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 	}
 
 	public void escutar() throws IOException {
+		/* funcao que fica ativa recebendo as mensagens de outros usuários através do socket */
 		InputStream linhaEntrada = socket.getInputStream();
 		InputStreamReader leitorLinhaEntrada = new InputStreamReader(linhaEntrada);
 		BufferedReader BLeitor = new BufferedReader(leitorLinhaEntrada);
@@ -312,6 +318,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 	}
 
 	public void sair() {
+		/* função que fecha as conexões e sai do programa */
 		if (sair == 1) {
 			try {
 				BEscritor.write("Saiu da sala!" + "\r\n");
@@ -414,6 +421,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 	}
 
 	public void timer() {
+		/* faz o quadradinho piscar */
 		long TEMPO = (470 * 2);
 		if (timer == null) {
 			timer = new Timer();
@@ -437,15 +445,17 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 	}
 
 	public void focusGained(FocusEvent e) {
+		/* listener pra perceber se o foco foi ganho*/
 		notificacao = 0;
 	}
 
 	public void focusLost(FocusEvent e) {
+		/* listener pra saber se o foco foi perdido */
 		notificacao = 1;
 	}
 
 	void notificacao() {
-
+     /* som e flash de notificação */
 		if (notificacao == 1) {
 			try {
 				noti = getClass().getResource("notificacao.wav");
@@ -462,7 +472,4 @@ public class Cliente extends JFrame implements ActionListener, KeyListener, Focu
 		}
 	}
 
-	public void aviso(String message) {
-
-	}
 }

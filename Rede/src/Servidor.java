@@ -36,11 +36,12 @@ public class Servidor extends Thread {
 	private BufferedWriter BEscritor;
 	private JFrame f;
 	private JPanel p;
-	private static JTextArea t;
+	private static JTextArea log;
 	private JScrollPane s;
 	private static JTextField txtPorta;
 
 	public Servidor(Socket socket) {
+		/* Thread dos clientes */
 		this.socket = socket;
 		try {
 			linhaEntrada = socket.getInputStream();
@@ -52,6 +53,7 @@ public class Servidor extends Thread {
 	}
 
 	public void run() {
+		/* recebe a mensagem e manda pro espalharMensagem */
 		try {
 			String mensagem = "";
 			OutputStream linhaSaida = this.socket.getOutputStream();
@@ -69,6 +71,7 @@ public class Servidor extends Thread {
 	}
 
 	public void espalharMsg(BufferedWriter BSaida, String mensagem) throws IOException {
+		/* envia a mensagem para todos os clientes */
 		BufferedWriter BEscritor;
 		java.util.Date data = new java.util.Date();
 		SimpleDateFormat formatarData = new SimpleDateFormat("HH:mm");
@@ -128,14 +131,14 @@ public class Servidor extends Thread {
 				// e.printStackTrace();
 			}
 		}
-		t.setCaretPosition(t.getDocument().getLength());
-		t.append(nome + ": " + mensagem + "\r\n");
+		log.setCaretPosition(log.getDocument().getLength());
+		log.append(nome + ": " + mensagem + "\r\n");
 	}
 
 	public static void main(String[] args) {
-
+		/* inicia o servidor, perguntando a porta */
 		try {
-			JLabel lblMessage = new JLabel("Porta do Servidor:");
+			JLabel lblMessage = new JLabel("Porta a ser utilizada:");
 			txtPorta = new JTextField();
 			Object[] texts = { lblMessage, txtPorta };
 			JOptionPane.showMessageDialog(null, texts);
@@ -146,14 +149,13 @@ public class Servidor extends Thread {
 			JOptionPane.showMessageDialog(null, "Servidor ativo na porta: " + txtPorta.getText());
 			new Servidor();
 			while (true) {
-				t.append("Aguardando conexão...\r\n");
+				log.append("Aguardando conexão...\r\n");
 				Socket socket = server.accept();
 				String aviso = "Cliente " + InetAddress.getLocalHost() + " conectado...";
-				t.append(aviso + "\r\n");
+				log.append(aviso + "\r\n");
 				Thread t = new Servidor(socket);
 				t.start();
 			}
-
 		} catch (Exception e) {
 			// System.out.println(e);
 			JLabel lblErro = new JLabel("Erro: Porta já esta em uso ");
@@ -164,10 +166,12 @@ public class Servidor extends Thread {
 	}
 
 	public Servidor() {
+		/* constructor da interface do log */
 		gui();
 	}
 
 	public void gui() {
+		/* interface do log */
 		try {
 			try {
 				URL whatismyip = new URL("http://checkip.amazonaws.com");
@@ -186,16 +190,17 @@ public class Servidor extends Thread {
 			p.setBounds(2, 2, 0, 0);
 			f.add(p);
 			p.setLayout(null);
-			t = new JTextArea();
-			p.add(t);
-			t.setEditable(false);
-			t.setFont(new Font("SansSerif", Font.PLAIN, 15));
-			s = new JScrollPane(t);
+			log = new JTextArea();
+			p.add(log);
+			log.setEditable(false);
+			log.setFont(new Font("SansSerif", Font.PLAIN, 15));
+			s = new JScrollPane(log);
 			s.setBorder(BorderFactory.createEtchedBorder(Color.white, Color.white));
 			s.setBounds(4, 4, 427, 444);
-			t.setLineWrap(true);
+			log.setLineWrap(true);
 			p.add(s);
 			f.setVisible(true);
+			log.setText("Servidor iniciado...\r\n");
 		} catch (Exception e) {
 			// System.out.println(e);
 		}
